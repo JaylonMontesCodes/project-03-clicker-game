@@ -1,20 +1,30 @@
 // Project 03: Clicker Game
 // Built by Jaylon Montes 😎
 
+// =====================
 // GAME STATE
+// =====================
 let score = 0;
 let timeLeft = 10;
-let gameActive = true;
+let gameActive = false;
 let countdown = 3;
+let playerName = "";
+let gameStarted = false;
+let timer = null;
 
-
+// =====================
 // ELEMENTS
+// =====================
 const scoreDisplay = document.getElementById("score");
 const timeDisplay = document.getElementById("time");
-const button = document.getElementById("clickBtn");
+const clickBtn = document.getElementById("clickBtn");
 const message = document.getElementById("message");
+const startBtn = document.getElementById("startBtn");
+const nameInput = document.getElementById("playerName");
 
-// CLICK BUTTON LOGIC
+// =====================
+// START BUTTON LOGIC 🎬
+// =====================
 startBtn.addEventListener("click", function () {
   if (nameInput.value.trim() === "") {
     alert("Please enter your name first 🙂");
@@ -45,9 +55,21 @@ startBtn.addEventListener("click", function () {
   }, 1000);
 });
 
-// TIMER LOGIC
+// =====================
+// CLICK BUTTON LOGIC 👆
+// =====================
+clickBtn.addEventListener("click", function () {
+  if (gameActive && gameStarted) {
+    score++;
+    scoreDisplay.textContent = "Score: " + score;
+  }
+});
+
+// =====================
+// TIMER LOGIC ⏱️
+// =====================
 function startTimer() {
-  const timer = setInterval(function () {
+  timer = setInterval(function () {
     if (timeLeft > 0) {
       timeLeft--;
       timeDisplay.textContent = "Time Left: " + timeLeft;
@@ -58,16 +80,12 @@ function startTimer() {
   }, 1000);
 }
 
-// END GAME FUNCTION
-function endGame() {
-  gameActive = false;
-  button.disabled = true;
-  message.textContent = "Game Over! Final Score: " + score;
-  clearInterval(timer);
-}
+// =====================
+// START GAME
+// =====================
 function startGame() {
   gameActive = true;
-  button.disabled = false;
+  clickBtn.disabled = false;
 
   score = 0;
   timeLeft = 10;
@@ -78,3 +96,13 @@ function startGame() {
   startTimer();
 }
 
+// =====================
+// END GAME 🏁
+// =====================
+function endGame() {
+  gameActive = false;
+  clickBtn.disabled = true;
+
+  message.textContent =
+    "🎉 Congrats " + playerName + "! Final Score: " + score;
+}
