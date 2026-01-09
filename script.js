@@ -6,10 +6,11 @@
 // =====================
 let score = 0;
 let timeLeft = 10;
-let gameActive = false;
 let countdown = 3;
 let playerName = "";
-let gameStarted = false;
+let gameState = "idle"; 
+// idle → countdown → playing → gameover
+
 let timer = null;
 
 // =====================
@@ -17,32 +18,52 @@ let timer = null;
 // =====================
 const scoreDisplay = document.getElementById("score");
 const timeDisplay = document.getElementById("time");
-const clickBtn = document.getElementById("clickBtn");
+const button = document.getElementById("gameBtn");
 const message = document.getElementById("message");
-const startBtn = document.getElementById("startBtn");
 const nameInput = document.getElementById("playerName");
 
 // =====================
-// START BUTTON LOGIC 🎬
+// MAIN BUTTON LOGIC 🎮
 // =====================
-startBtn.addEventListener("click", function () {
-  if (nameInput.value.trim() === "") {
-    alert("Please enter your name first 🙂");
-    return;
+button.addEventListener("click", function () {
+
+  // START GAME
+  if (gameState === "idle") {
+    if (nameInput.value.trim() === "") {
+      alert("Please enter your name 🙂");
+      return;
+    }
+
+    playerName = nameInput.value;
+    nameInput.disabled = true;
+
+    gameState = "countdown";
+    button.disabled = true;
+    message.textContent = "Get Ready... ⏱️";
+
+    startCountdown();
   }
 
-  playerName = nameInput.value;
-  gameStarted = true;
+  // CLICKING GAMEPLAY
+  else if (gameState === "playing") {
+    score++;
+    scoreDisplay.textContent = "Score: " + score;
+  }
 
-  startBtn.disabled = true;
-  nameInput.disabled = true;
+  // PLAY AGAIN
+  else if (gameState === "gameover") {
+    resetGame();
+  }
+});
 
-  message.textContent = "Get ready... ⏱️";
-
+// =====================
+// COUNTDOWN ⏱️
+// =====================
+function startCountdown() {
   countdown = 3;
   message.textContent = countdown;
 
-  const countdownTimer = setInterval(function () {
+  const countdownTimer = setInterval(() => {
     countdown--;
 
     if (countdown > 0) {
@@ -53,39 +74,15 @@ startBtn.addEventListener("click", function () {
       startGame();
     }
   }, 1000);
-});
-
-// =====================
-// CLICK BUTTON LOGIC 👆
-// =====================
-clickBtn.addEventListener("click", function () {
-  if (gameActive && gameStarted) {
-    score++;
-    scoreDisplay.textContent = "Score: " + score;
-  }
-});
-
-// =====================
-// TIMER LOGIC ⏱️
-// =====================
-function startTimer() {
-  timer = setInterval(function () {
-    if (timeLeft > 0) {
-      timeLeft--;
-      timeDisplay.textContent = "Time Left: " + timeLeft;
-    } else {
-      clearInterval(timer);
-      endGame();
-    }
-  }, 1000);
 }
 
 // =====================
 // START GAME
 // =====================
 function startGame() {
-  gameActive = true;
-  clickBtn.disabled = false;
+  gameState = "playing";
+  button.disabled = false;
+  button.textContent = "CLICK ME!";
 
   score = 0;
   timeLeft = 10;
@@ -93,16 +90,37 @@ function startGame() {
   scoreDisplay.textContent = "Score: 0";
   timeDisplay.textContent = "Time Left: 10";
 
-  startTimer();
+  timer = setInterval(() => {
+    timeLeft--;
+    timeDisplay.textContent = "Time Left: " + timeLeft;
+
+    if (timeLeft === 0) {
+      endGame();
+    }
+  }, 1000);
 }
 
 // =====================
 // END GAME 🏁
 // =====================
 function endGame() {
-  gameActive = false;
-  clickBtn.disabled = true;
+  clearInterval(timer);
+  gameState = "gameover";
 
-  message.textContent =
-    "🎉 Congrats " + playerName + "! Final Score: " + score;
+  button.textContent = "Play Again 🔁";
+  message.textContent = `🎉 Congrats ${playerName}! Final Score: ${score}`;
+}
+
+// =====================
+// RESET GAME 🔄
+// =====================
+function resetGame() {
+  gameState = "idle";
+  button.textContent = "Start Game 🎬";
+  message.textContent = "";
+  nameInput.disabled = false;
+  nameInput.value = "";
+
+  scoreDisplay.textContent = "Score: 0";
+  timeDisplay.textContent = "Time Left: 10";
 }
