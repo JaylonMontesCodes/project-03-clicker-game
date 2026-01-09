@@ -5,18 +5,27 @@
   <title>Clicker Game | Jaylon</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <h1>🔥 Clicker Game 🔥</h1>
 
+  <div id="setup">
+    <input
+      type="text"
+      id="playerName"
+      placeholder="Enter your name"
+    />
+    <button id="startBtn">Start Game 🎬</button>
+  </div>
+
+  <p id="message"></p>
+
   <p id="score">Score: 0</p>
   <p id="time">Time Left: 10</p>
 
-  <button id="clickBtn">CLICK ME 🖱️</button>
-
-  <p id="message"></p>
+  <button id="clickBtn" disabled>CLICK ME!</button>
 
   <script src="script.js"></script>
 </body>
 </html>
-
