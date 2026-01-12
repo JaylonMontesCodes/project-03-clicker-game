@@ -53,6 +53,8 @@ button.addEventListener("click", function () {
     gameState = "countdown";
     button.disabled = true;
     message.textContent = "Get Ready... ⏱️";
+    combo = 0;
+    comboDisplay.textContent = "Combo: x1";
 
     startCountdown();
   }
@@ -61,16 +63,16 @@ button.addEventListener("click", function () {
 else if (gameState === "playing") {
   score += 1 + combo;
   combo++;
-
-  comboDisplay.textContent = "Combo: x" + (combo + 1);
-  scoreDisplay.textContent = "Score: " + score;
+score += combo;
+comboDisplay.textContent = "Combo: x" + combo;
 
   clearTimeout(comboTimer);
   comboTimer = setTimeout(() => {
     combo = 0;
     comboDisplay.textContent = "Combo: x1";
   }, 1000);
-}
+}//
+  
 // =====================
 // COUNTDOWN ⏱️
 // =====================
@@ -158,8 +160,6 @@ function resetGame() {
 // =====================
 // 🔊 SOUND SYSTEM (Ready for later)
 // =====================
-const clickSound = new Audio("sounds/click.mp3");
-const winSound = new Audio("sounds/win.mp3");
 
 // Prevent sound stacking
 clickSound.volume = 0.5;
