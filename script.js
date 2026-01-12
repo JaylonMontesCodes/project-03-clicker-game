@@ -28,6 +28,8 @@ const timeDisplay = document.getElementById("time");
 const button = document.getElementById("gameBtn");
 const message = document.getElementById("message");
 const nameInput = document.getElementById("playerName");
+const highScoreDisplay = document.getElementById("highScore");
+highScoreDisplay.textContent = "High Score: " + highScore;
 
 // =====================
 // MAIN BUTTON LOGIC 🎮
@@ -118,13 +120,19 @@ function endGame() {
   clearInterval(timer);
   gameState = "gameover";
 
+  if (score > highScore) {
+    highScore = score;
+    localStorage.setItem("clickerHighScore", highScore);
+    highScoreDisplay.textContent = "High Score: " + highScore;
+    message.textContent = `🏆 NEW RECORD ${playerName}! Score: ${score}`;
+  } else {
+    message.textContent = `🎉 Nice job ${playerName}! Score: ${score}`;
+  }
+
   winSound.currentTime = 0;
   winSound.play();
-
   button.textContent = "Play Again 🔁";
-  message.textContent = `🎉 Congrats ${playerName}! Final Score: ${score}`;
 }
-
 // =====================
 // RESET GAME 🔄
 // =====================
