@@ -9,6 +9,7 @@ let timeLeft = 10;
 let countdown = 3;
 let playerName = "";
 let gameState = "idle"; 
+let highScore = localStorage.getItem("clickerHighScore") || 0;
 // idle → countdown → playing → gameover
 
 let timer = null;
@@ -52,12 +53,13 @@ button.addEventListener("click", function () {
 
   // CLICKING GAMEPLAY
   else if (gameState === "playing") {
-    score++;
-    scoreDisplay.textContent = "Score: " + score;
+  score++;
+  scoreDisplay.textContent = "Score: " + score;
 
-    clickSound.currentTime = 0;
-    clickSound.play();
-  }
+  // 🔊 click sound
+  clickSound.currentTime = 0;
+  clickSound.play();
+}
 
   // PLAY AGAIN
   else if (gameState === "gameover") {
@@ -116,6 +118,7 @@ function endGame() {
   clearInterval(timer);
   gameState = "gameover";
 
+  winSound.currentTime = 0;
   winSound.play();
 
   button.textContent = "Play Again 🔁";
@@ -135,3 +138,12 @@ function resetGame() {
   scoreDisplay.textContent = "Score: 0";
   timeDisplay.textContent = "Time Left: 10";
 }
+// =====================
+// 🔊 SOUND SYSTEM (Ready for later)
+// =====================
+const clickSound = new Audio("sounds/click.mp3");
+const winSound = new Audio("sounds/win.mp3");
+
+// Prevent sound stacking
+clickSound.volume = 0.5;
+winSound.volume = 0.7;
