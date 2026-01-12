@@ -14,6 +14,12 @@ let gameState = "idle";
 let timer = null;
 
 // =====================
+// SOUNDS 🔊
+// =====================
+const clickSound = new Audio("sounds/click.mp3");
+const winSound = new Audio("sounds/win.mp3");
+
+// =====================
 // ELEMENTS
 // =====================
 const scoreDisplay = document.getElementById("score");
@@ -48,6 +54,9 @@ button.addEventListener("click", function () {
   else if (gameState === "playing") {
     score++;
     scoreDisplay.textContent = "Score: " + score;
+
+    clickSound.currentTime = 0;
+    clickSound.play();
   }
 
   // PLAY AGAIN
@@ -106,8 +115,8 @@ function startGame() {
 function endGame() {
   clearInterval(timer);
   gameState = "gameover";
-  
-  winSound.play(); // 🔊 play sound at game end
+
+  winSound.play();
 
   button.textContent = "Play Again 🔁";
   message.textContent = `🎉 Congrats ${playerName}! Final Score: ${score}`;
@@ -125,17 +134,4 @@ function resetGame() {
 
   scoreDisplay.textContent = "Score: 0";
   timeDisplay.textContent = "Time Left: 10";
-}
-// =====================
-// SOUNDS 🔊
-// =====================
-const clickSound = new Audio("sounds/click.mp3");
-const winSound = new Audio("sounds/win.mp3");
-
-else if (gameState === "playing") {
-  score++;
-  scoreDisplay.textContent = "Score: " + score;
-
-  clickSound.currentTime = 0;
-  clickSound.play();
 }
