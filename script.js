@@ -9,7 +9,7 @@ let timeLeft = 10;
 let countdown = 3;
 let playerName = "";
 let gameState = "idle"; 
-let highScore = localStorage.getItem("clickerHighScore") || 0;
+let highScore = Number(localStorage.getItem("clickerHighScore")) || 0;
 let combo = 0;
 let comboTimer = null;
 // idle → countdown → playing → gameover
@@ -41,37 +41,20 @@ const difficultySelect = document.getElementById("difficulty");
 button.addEventListener("click", function () {
 
   // START GAME
-  if (gameState === "idle") {
-    if (nameInput.value.trim() === "") {
-      alert("Please enter your name 🙂");
-      return;
-    }
-
-    playerName = nameInput.value;
-    nameInput.disabled = true;
-
-    gameState = "countdown";
-    button.disabled = true;
-    message.textContent = "Get Ready... ⏱️";
-    combo = 0;
-    comboDisplay.textContent = "Combo: x1";
-
-    startCountdown();
-  }
-
-  // CLICKING GAMEPLAY
 else if (gameState === "playing") {
-  score += 1 + combo;
   combo++;
-score += combo;
-comboDisplay.textContent = "Combo: x" + combo;
+  score += combo;
+
+  scoreDisplay.textContent = "Score: " + score;
+  comboDisplay.textContent = "Combo: x" + combo;
 
   clearTimeout(comboTimer);
   comboTimer = setTimeout(() => {
     combo = 0;
     comboDisplay.textContent = "Combo: x1";
   }, 1000);
-}//
+}
+//
   
 // =====================
 // COUNTDOWN ⏱️
@@ -122,6 +105,8 @@ function startGame() {
     }
   }, 1000);
 }
+combo = 0;
+comboDisplay.textContent = "Combo: x1";
 
 
 // =====================
@@ -139,7 +124,9 @@ function endGame() {
   } else {
     message.textContent = `🎉 Nice job ${playerName}! Score: ${score}`;
   }
-
+else if (gameState === "gameover") {
+  resetGame();
+}
   winSound.currentTime = 0;
   winSound.play();
   button.textContent = "Play Again 🔁";
