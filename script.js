@@ -8,12 +8,10 @@ let score = 0;
 let timeLeft = 10;
 let countdown = 3;
 let playerName = "";
-let gameState = "idle"; 
+let gameState = "idle"; // idle → countdown → playing → gameover
 let highScore = Number(localStorage.getItem("clickerHighScore")) || 0;
 let combo = 0;
 let comboTimer = null;
-// idle → countdown → playing → gameover
-
 let timer = null;
 
 // =====================
@@ -21,6 +19,9 @@ let timer = null;
 // =====================
 const clickSound = new Audio("sounds/click.mp3");
 const winSound = new Audio("sounds/win.mp3");
+
+clickSound.volume = 0.5;
+winSound.volume = 0.7;
 
 // =====================
 // ELEMENTS
@@ -31,31 +32,58 @@ const button = document.getElementById("gameBtn");
 const message = document.getElementById("message");
 const nameInput = document.getElementById("playerName");
 const highScoreDisplay = document.getElementById("highScore");
-highScoreDisplay.textContent = "High Score: " + highScore;
 const comboDisplay = document.getElementById("combo");
 const difficultySelect = document.getElementById("difficulty");
+
+highScoreDisplay.textContent = "High Score: " + highScore;
+comboDisplay.textContent = "Combo: x1";
 
 // =====================
 // MAIN BUTTON LOGIC 🎮
 // =====================
-button.addEventListener("click", function () {
+button.addEventListener("click", () => {
 
   // START GAME
-else if (gameState === "playing") {
-  combo++;
-  score += combo;
+  if (gameState === "idle") {
+    if (nameInput.value.trim() === "") {
+      alert("Please enter your name 🙂");
+      return;
+    }
 
-  scoreDisplay.textContent = "Score: " + score;
-  comboDisplay.textContent = "Combo: x" + combo;
+    playerName = nameInput.value;
+    nameInput.disabled = true;
 
-  clearTimeout(comboTimer);
-  comboTimer = setTimeout(() => {
-    combo = 0;
-    comboDisplay.textContent = "Combo: x1";
-  }, 1000);
-}
-//
-  
+    gameState = "countdown";
+    button.disabled = true;
+    message.textContent = "Get Ready... ⏱️";
+
+    startCountdown();
+  }
+
+  // GAMEPLAY CLICK
+  else if (gameState === "playing") {
+    combo++;
+    score += combo;
+
+    scoreDisplay.textContent = "Score: " + score;
+    comboDisplay.textContent = "Combo: x" + combo;
+
+    clickSound.currentTime = 0;
+    clickSound.play();
+
+    clearTimeout(comboTimer);
+    comboTimer = setTimeout(() => {
+      combo = 0;
+      comboDisplay.textContent = "Combo: x1";
+    }, 1000);
+  }
+
+  // PLAY AGAIN
+  else if (gameState === "gameover") {
+    resetGame();
+  }
+});
+
 // =====================
 // COUNTDOWN ⏱️
 // =====================
@@ -85,9 +113,10 @@ function startGame() {
   button.textContent = "CLICK ME!";
 
   score = 0;
+  combo = 0;
+  comboDisplay.textContent = "Combo: x1";
 
   let timeLimit = 10;
-
   if (difficultySelect.value === "easy") timeLimit = 15;
   if (difficultySelect.value === "hard") timeLimit = 7;
 
@@ -105,9 +134,6 @@ function startGame() {
     }
   }, 1000);
 }
-combo = 0;
-comboDisplay.textContent = "Combo: x1";
-
 
 // =====================
 // END GAME 🏁
@@ -124,13 +150,13 @@ function endGame() {
   } else {
     message.textContent = `🎉 Nice job ${playerName}! Score: ${score}`;
   }
-else if (gameState === "gameover") {
-  resetGame();
-}
+
   winSound.currentTime = 0;
   winSound.play();
+
   button.textContent = "Play Again 🔁";
 }
+
 // =====================
 // RESET GAME 🔄
 // =====================
@@ -138,16 +164,11 @@ function resetGame() {
   gameState = "idle";
   button.textContent = "Start Game 🎬";
   message.textContent = "";
+
   nameInput.disabled = false;
   nameInput.value = "";
 
   scoreDisplay.textContent = "Score: 0";
   timeDisplay.textContent = "Time Left: 10";
+  comboDisplay.textContent = "Combo: x1";
 }
-// =====================
-// 🔊 SOUND SYSTEM (Ready for later)
-// =====================
-
-// Prevent sound stacking
-clickSound.volume = 0.5;
-winSound.volume = 0.7;
