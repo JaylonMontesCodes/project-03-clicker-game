@@ -53,6 +53,12 @@ function getComboDecay() {
   return 1000; // moderate
 }
 
+function getMultiplier() {
+  if (difficultySelect.value === "easy") return 1;
+  if (difficultySelect.value === "hard") return 2;
+  return 1.5; // moderate
+}
+
 // =====================
 // MAIN BUTTON LOGIC 🎮
 // =====================
@@ -78,7 +84,7 @@ button.addEventListener("click", () => {
   // GAMEPLAY CLICK
   else if (gameState === "playing") {
     combo++;
-    score += combo;
+    score += Math.floor(combo * getMultiplier());
 
     scoreDisplay.textContent = "Score: " + score;
     comboDisplay.textContent = "Combo: x" + combo;
