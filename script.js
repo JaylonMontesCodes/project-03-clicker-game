@@ -1,4 +1,4 @@
-// Project 03: Clicker Game
+// Project 03: ClickerMania
 // Built by Jaylon Montes 😎
 
 // =====================
@@ -39,6 +39,21 @@ highScoreDisplay.textContent = "High Score: " + highScore;
 comboDisplay.textContent = "Combo: x1";
 
 // =====================
+// DIFFICULTY HELPERS
+// =====================
+function getTimeLimit() {
+  if (difficultySelect.value === "easy") return 15;
+  if (difficultySelect.value === "hard") return 7;
+  return 10; // moderate
+}
+
+function getComboDecay() {
+  if (difficultySelect.value === "easy") return 1500;
+  if (difficultySelect.value === "hard") return 500;
+  return 1000; // moderate
+}
+
+// =====================
 // MAIN BUTTON LOGIC 🎮
 // =====================
 button.addEventListener("click", () => {
@@ -75,7 +90,7 @@ button.addEventListener("click", () => {
     comboTimer = setTimeout(() => {
       combo = 0;
       comboDisplay.textContent = "Combo: x1";
-    }, 1000);
+    }, getComboDecay());
   }
 
   // PLAY AGAIN
@@ -116,11 +131,7 @@ function startGame() {
   combo = 0;
   comboDisplay.textContent = "Combo: x1";
 
-  let timeLimit = 10;
-  if (difficultySelect.value === "easy") timeLimit = 15;
-  if (difficultySelect.value === "hard") timeLimit = 7;
-
-  timeLeft = timeLimit;
+  timeLeft = getTimeLimit();
 
   scoreDisplay.textContent = "Score: 0";
   timeDisplay.textContent = "Time Left: " + timeLeft;
@@ -172,3 +183,4 @@ function resetGame() {
   timeDisplay.textContent = "Time Left: 10";
   comboDisplay.textContent = "Combo: x1";
 }
+
