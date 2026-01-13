@@ -13,6 +13,7 @@ let highScore = Number(localStorage.getItem("clickerHighScore")) || 0;
 let combo = 0;
 let comboTimer = null;
 let timer = null;
+let nameLocked = false;
 
 // =====================
 // SOUNDS 🔊
@@ -66,13 +67,24 @@ button.addEventListener("click", () => {
 
   // START GAME
   if (gameState === "idle") {
+
+  if (!nameLocked) {
     if (nameInput.value.trim() === "") {
-      alert("Please enter your name 🙂");
+      message.textContent = "⚠️ Please enter your name to start!";
       return;
     }
 
     playerName = nameInput.value;
     nameInput.disabled = true;
+    nameLocked = true;
+  }
+
+  gameState = "countdown";
+  button.disabled = true;
+  message.textContent = "Get Ready... ⏱️";
+  startCountdown();
+}
+
 
     gameState = "countdown";
     button.disabled = true;
