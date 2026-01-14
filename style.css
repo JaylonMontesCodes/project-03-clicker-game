@@ -102,4 +102,15 @@ body[data-style="clean"] button {
 body[data-style="clean"] button:hover {
   transform: none;
 }
+.scorePopup {
+  position: fixed;
+  top: 50%;
+  font-size: 24px;
+  color: gold;
+  animation: floatUp 1s ease-out forwards;
+}
 
+@keyframes floatUp {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-80px); }
+}
