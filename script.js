@@ -208,3 +208,4 @@ function resetGame() {
   timeDisplay.textContent = "Time Left: 10";
   comboDisplay.textContent = "Combo: x1";
 }
+
