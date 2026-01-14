@@ -1,6 +1,3 @@
-// Project 03: ClickerMania
-// Built by Jaylon Montes 😎
-
 // =====================
 // GAME STATE
 // =====================
@@ -8,7 +5,7 @@ let score = 0;
 let timeLeft = 10;
 let countdown = 3;
 let playerName = "";
-let gameState = "idle"; // idle → countdown → playing → gameover
+let gameState = "idle";
 let highScore = Number(localStorage.getItem("clickerHighScore")) || 0;
 let combo = 0;
 let comboTimer = null;
@@ -16,25 +13,26 @@ let timer = null;
 let nameLocked = false;
 
 // =====================
-// UI STYLE TOGGLE 🎨
+// UI STYLE 🎨
 // =====================
 const styleToggle = document.getElementById("styleToggle");
 
 let uiStyle = localStorage.getItem("uiStyle") || "flashy";
 document.body.setAttribute("data-style", uiStyle);
-styleToggle.textContent = uiStyle === "flashy"
-  ? "UI Mode: Flashy ✨"
-  : "UI Mode: Clean 🧼";
+updateStyleButton();
 
 styleToggle.addEventListener("click", () => {
   uiStyle = uiStyle === "flashy" ? "clean" : "flashy";
-  document.body.setAttribute("data-style", uiStyle);
   localStorage.setItem("uiStyle", uiStyle);
-
-  styleToggle.textContent = uiStyle === "flashy"
-    ? "UI Mode: Flashy ✨"
-    : "UI Mode: Clean 🧼";
+  document.body.setAttribute("data-style", uiStyle);
+  updateStyleButton();
 });
+
+function updateStyleButton() {
+  styleToggle.textContent = uiStyle === "flashy"
+    ? "🎨 UI Mode: Flashy ✨"
+    : "🎨 UI Mode: Clean 🧼";
+}
 
 // =====================
 // SOUNDS 🔊
@@ -58,63 +56,51 @@ const comboDisplay = document.getElementById("combo");
 const difficultySelect = document.getElementById("difficulty");
 
 highScoreDisplay.textContent = "High Score: " + highScore;
-comboDisplay.textContent = "Combo: x1";
 
 // =====================
-// DIFFICULTY HELPERS
+// DIFFICULTY
 // =====================
 function getTimeLimit() {
   if (difficultySelect.value === "easy") return 15;
   if (difficultySelect.value === "hard") return 7;
-  return 10; // moderate
+  return 10;
 }
 
 function getComboDecay() {
   if (difficultySelect.value === "easy") return 1500;
   if (difficultySelect.value === "hard") return 500;
-  return 1000; // moderate
+  return 1000;
 }
 
 function getMultiplier() {
   if (difficultySelect.value === "easy") return 1;
   if (difficultySelect.value === "hard") return 2;
-  return 1.5; // moderate
+  return 1.5;
 }
 
 // =====================
-// MAIN BUTTON LOGIC 🎮
+// MAIN BUTTON 🎮
 // =====================
 button.addEventListener("click", () => {
 
-  // START GAME
   if (gameState === "idle") {
+    if (!nameLocked) {
+      if (nameInput.value.trim() === "") {
+        message.textContent = "⚠️ Please enter your name to start!";
+        return;
+      }
 
-  if (!nameLocked) {
-    if (nameInput.value.trim() === "") {
-      message.textContent = "⚠️ Please enter your name to start!";
-      return;
+      playerName = nameInput.value;
+      nameInput.disabled = true;
+      nameLocked = true;
     }
-
-    playerName = nameInput.value;
-    nameInput.disabled = true;
-    nameLocked = true;
-  }
-
-  gameState = "countdown";
-  button.disabled = true;
-  message.textContent = "Get Ready... ⏱️";
-  startCountdown();
-}
-
 
     gameState = "countdown";
     button.disabled = true;
     message.textContent = "Get Ready... ⏱️";
-
     startCountdown();
   }
 
-  // GAMEPLAY CLICK
   else if (gameState === "playing") {
     combo++;
     score += Math.floor(combo * getMultiplier());
@@ -132,26 +118,26 @@ button.addEventListener("click", () => {
     }, getComboDecay());
   }
 
-  // PLAY AGAIN
   else if (gameState === "gameover") {
     resetGame();
   }
+
 });
 
 // =====================
-// COUNTDOWN ⏱️
+// COUNTDOWN
 // =====================
 function startCountdown() {
   countdown = 3;
   message.textContent = countdown;
 
-  const countdownTimer = setInterval(() => {
+  const cd = setInterval(() => {
     countdown--;
 
     if (countdown > 0) {
       message.textContent = countdown;
     } else {
-      clearInterval(countdownTimer);
+      clearInterval(cd);
       message.textContent = "GO! 🚀";
       startGame();
     }
@@ -186,7 +172,7 @@ function startGame() {
 }
 
 // =====================
-// END GAME 🏁
+// END GAME
 // =====================
 function endGame() {
   clearInterval(timer);
@@ -203,12 +189,11 @@ function endGame() {
 
   winSound.currentTime = 0;
   winSound.play();
-
   button.textContent = "Play Again 🔁";
 }
 
 // =====================
-// RESET GAME 🔄
+// RESET
 // =====================
 function resetGame() {
   gameState = "idle";
@@ -217,9 +202,9 @@ function resetGame() {
 
   nameInput.disabled = false;
   nameInput.value = "";
+  nameLocked = false;
 
   scoreDisplay.textContent = "Score: 0";
   timeDisplay.textContent = "Time Left: 10";
   comboDisplay.textContent = "Combo: x1";
 }
-
