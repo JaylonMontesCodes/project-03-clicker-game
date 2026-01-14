@@ -16,6 +16,27 @@ let timer = null;
 let nameLocked = false;
 
 // =====================
+// UI STYLE TOGGLE 🎨
+// =====================
+const styleToggle = document.getElementById("styleToggle");
+
+let uiStyle = localStorage.getItem("uiStyle") || "flashy";
+document.body.setAttribute("data-style", uiStyle);
+styleToggle.textContent = uiStyle === "flashy"
+  ? "UI Mode: Flashy ✨"
+  : "UI Mode: Clean 🧼";
+
+styleToggle.addEventListener("click", () => {
+  uiStyle = uiStyle === "flashy" ? "clean" : "flashy";
+  document.body.setAttribute("data-style", uiStyle);
+  localStorage.setItem("uiStyle", uiStyle);
+
+  styleToggle.textContent = uiStyle === "flashy"
+    ? "UI Mode: Flashy ✨"
+    : "UI Mode: Clean 🧼";
+});
+
+// =====================
 // SOUNDS 🔊
 // =====================
 const clickSound = new Audio("sounds/click.mp3");
