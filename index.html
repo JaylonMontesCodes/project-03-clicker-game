@@ -1,130 +1,41 @@
-/* =========================
-   ClickerMania Styles
-   ========================= */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ClickerMania | Jaylon</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #0f172a;
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
-  height: 100vh;
+<body>
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+  <h1>🔥 ClickerMania 🔥</h1>
+  <p class="tagline">Fast clicks. Big scores. Ultimate glory.</p>
 
-/* Title */
-h1 {
-  margin-bottom: 5px;
-}
+  <input
+    type="text"
+    id="playerName"
+    placeholder="Enter your name"
+    autocomplete="off"
+  />
 
-/* Tagline */
-.tagline {
-  font-size: 16px;
-  color: #a5b4fc;
-  margin-bottom: 15px;
-}
+  <select id="difficulty">
+    <option value="easy">Easy 🟢 (15s)</option>
+    <option value="moderate" selected>Moderate 🟡 (10s)</option>
+    <option value="hard">Hard 🔴 (7s)</option>
+  </select>
 
-/* Inputs & Select */
-input, select {
-  margin-top: 10px;
-  padding: 10px 14px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-}
+  <button id="styleToggle">🎨 UI Mode: Flashy ✨</button>
 
-/* Stats */
-#score,
-#time,
-#combo,
-#highScore {
-  font-size: 20px;
-  margin: 6px 0;
-}
+  <button id="gameBtn">Start Game 🎬</button>
 
-/* Combo highlight */
-#combo {
-  color: #facc15;
-  font-weight: bold;
-}
+  <p id="score">Score: 0</p>
+  <p id="combo">Combo: x1</p>
+  <p id="highScore">High Score: 0</p>
+  <p id="time">Time Left: 10</p>
 
-/* High score highlight */
-#highScore {
-  color: #38bdf8;
-  font-weight: bold;
-}
+  <p id="message"></p>
 
-/* Button */
-button {
-  margin-top: 20px;
-  padding: 15px 30px;
-  font-size: 18px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  background-color: #22c55e;
-  color: black;
-  transition: transform 0.15s ease, background-color 0.25s ease;
-}
+  <script src="script.js"></script>
 
-/* Hover animation */
-button:hover {
-  transform: scale(1.1);
-  background-color: #16a34a;
-}
-
-/* Disabled button */
-button:disabled {
-  background-color: gray;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Messages */
-#message {
-  margin-top: 20px;
-  font-size: 22px;
-  font-weight: bold;
-}
-/* =========================
-   UI STYLE MODES
-   ========================= */
-
-/* CLEAN MODE */
-body[data-style="clean"] {
-  background-color: #0f172a;
-}
-
-body[data-style="clean"] button {
-  background-color: #e5e7eb;
-  color: #111827;
-}
-
-body[data-style="clean"] button:hover {
-  transform: none;
-  background-color: #d1d5db;
-}
-
-body[data-style="clean"] #combo {
-  color: #ffffff;
-}
-
-/* FLASHY MODE */
-body[data-style="flashy"] button {
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.7);
-}
-
-body[data-style="flashy"] #combo {
-  animation: pulse 0.4s ease-in-out infinite alternate;
-}
-
-@keyframes pulse {
-  from { transform: scale(1); }
-  to { transform: scale(1.15); }
-}
+</body>
+</html>
