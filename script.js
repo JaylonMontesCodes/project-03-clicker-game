@@ -1,3 +1,4 @@
+let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
 let score = 0;
 let timeLeft = 10;
 let gameState = "idle";
@@ -124,4 +125,46 @@ function resetGame() {
   gameState="idle";
   button.textContent="Start Game";
   message.textContent="";
+}
+function saveScore(name, score) {
+  const existing = leaderboard.find(p => p.name === name);
+
+  if (existing) {
+    if (score > existing.score) {
+      existing.score = score;
+      existing.date = new Date().toLocaleDateString();
+    }
+  } else {
+    leaderboard.push({
+      name,
+      score,
+      date: new Date().toLocaleDateString()
+    });
+  }
+
+  leaderboard.sort((a, b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0, 10);
+
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+  renderLeaderboard();
+}
+
+function renderLeaderboard() {
+  const board = document.getElementById("leaderboard");
+
+  if (!leaderboard.length) {
+    board.innerHTML = "<p>No scores yet</p>";
+    return;
+  }
+
+  board.innerHTML = leaderboard.map((p, i) =>
+    `<p>#${i + 1} — <strong>${p.name}</strong> — ${p.score}</p>`
+  ).join("");
+}
+function endGame() {
+  saveScore(nameInput.value, score);
+
+  clearInterval(timer);
+  gameState="gameover";
+  ...
 }
