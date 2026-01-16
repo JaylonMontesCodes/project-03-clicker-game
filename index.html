@@ -2,15 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ClickerMania | Jaylon</title>
+  <title>🔥 ClickerMania 🔥</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body data-style="flashy">
 
   <h1>🔥 ClickerMania 🔥</h1>
   <p class="tagline">Fast clicks. Big scores. Ultimate glory.</p>
 
-  <input id="playerName" placeholder="Enter your name" autocomplete="off" />
+  <!-- Leaderboard -->
+  <div id="leaderboard"></div>
+
+  <!-- Game UI -->
+  <input id="playerName" type="text" placeholder="Enter your name" />
 
   <select id="difficulty">
     <option value="easy">Easy 🟢 (15s)</option>
@@ -18,16 +22,13 @@
     <option value="hard">Hard 🔴 (7s)</option>
   </select>
 
-  <button id="styleToggle">🎨 UI: Flashy</button>
-  <button id="gameBtn">Start Game</button>
-
-    <div id="leaderboard"></div>
+  <button id="styleToggle">🎨 UI Mode</button>
+  <button id="gameBtn">Start Game 🎬</button>
 
   <p id="score">Score: 0</p>
   <p id="combo">Combo: x1</p>
   <p id="highScore">High Score: 0</p>
   <p id="time">Time Left: 10</p>
-
   <p id="message"></p>
 
   <script src="script.js"></script>
