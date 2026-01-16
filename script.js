@@ -1,14 +1,16 @@
 let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
 let score = 0;
 let timeLeft = 10;
 let gameState = "idle";
-let highScore = localStorage.getItem("clickerHighScore") || 0;
+let highScore = Number(localStorage.getItem("clickerHighScore")) || 0;
 let clickStreak = 0;
 let lastClickTime = 0;
 
 let scoreBoost = false;
 let timeFrozen = false;
 let comboLock = false;
+let timer;
 
 const scoreDisplay = document.getElementById("score");
 const timeDisplay = document.getElementById("time");
@@ -20,6 +22,8 @@ const comboDisplay = document.getElementById("combo");
 const difficultySelect = document.getElementById("difficulty");
 const styleToggle = document.getElementById("styleToggle");
 
+const leaderboardDiv = document.getElementById("leaderboard");
+
 let uiStyle = localStorage.getItem("uiStyle") || "flashy";
 document.body.setAttribute("data-style", uiStyle);
 
@@ -30,6 +34,7 @@ styleToggle.onclick = () => {
 };
 
 highScoreDisplay.textContent = "High Score: " + highScore;
+renderLeaderboard();
 
 function getTimeLimit() {
   return difficultySelect.value === "easy" ? 15 :
@@ -54,10 +59,17 @@ button.onclick = () => {
 };
 
 function startGame() {
+  if (!nameInput.value.trim()) {
+    message.textContent = "Enter your name!";
+    return;
+  }
+
   score = 0;
   clickStreak = 0;
+  lastClickTime = 0;
   timeLeft = getTimeLimit();
   gameState = "playing";
+
   button.textContent = "CLICK!";
   message.textContent = "";
 
@@ -71,8 +83,11 @@ function startGame() {
 function registerClick() {
   const now = Date.now();
 
-  if (now - lastClickTime < 1200 || comboLock) clickStreak++;
-  else clickStreak = Math.max(1, clickStreak - 2);
+  if (now - lastClickTime < 800 || comboLock) {
+    clickStreak++;
+  } else {
+    clickStreak = 1;   // stable reset
+  }
 
   lastClickTime = now;
 
@@ -87,7 +102,7 @@ function registerClick() {
 }
 
 function maybeSpawnPowerup() {
-  if (Math.random() < 0.1) {
+  if (Math.random() < 0.08) {
     const p = ["score","freeze","combo"][Math.floor(Math.random()*3)];
     if (p === "score") { scoreBoost=true; message.textContent="⚡ Score Boost!"; setTimeout(()=>scoreBoost=false,5000); }
     if (p === "freeze") { timeFrozen=true; message.textContent="❄️ Time Frozen!"; setTimeout(()=>timeFrozen=false,3000); }
@@ -103,6 +118,8 @@ function spawnPopup(text) {
   const p=document.createElement("div");
   p.className="scorePopup";
   p.textContent=text;
+  p.style.left="50%";
+  p.style.transform="translateX(-50%)";
   document.body.appendChild(p);
 
   setTimeout(()=>{p.remove();popupActive=false},900);
@@ -112,6 +129,7 @@ function endGame() {
   clearInterval(timer);
   gameState="gameover";
   button.textContent="Play Again";
+
   message.textContent="Final Score: "+score;
 
   if (score > highScore) {
@@ -119,6 +137,8 @@ function endGame() {
     localStorage.setItem("clickerHighScore", highScore);
     highScoreDisplay.textContent = "High Score: " + highScore;
   }
+
+  saveScore(nameInput.value.trim(), score);
 }
 
 function resetGame() {
@@ -126,20 +146,14 @@ function resetGame() {
   button.textContent="Start Game";
   message.textContent="";
 }
+
 function saveScore(name, score) {
   const existing = leaderboard.find(p => p.name === name);
 
   if (existing) {
-    if (score > existing.score) {
-      existing.score = score;
-      existing.date = new Date().toLocaleDateString();
-    }
+    if (score > existing.score) existing.score = score;
   } else {
-    leaderboard.push({
-      name,
-      score,
-      date: new Date().toLocaleDateString()
-    });
+    leaderboard.push({ name, score });
   }
 
   leaderboard.sort((a, b) => b.score - a.score);
@@ -150,21 +164,12 @@ function saveScore(name, score) {
 }
 
 function renderLeaderboard() {
-  const board = document.getElementById("leaderboard");
-
   if (!leaderboard.length) {
-    board.innerHTML = "<p>No scores yet</p>";
+    leaderboardDiv.innerHTML = "<p>No scores yet</p>";
     return;
   }
 
-  board.innerHTML = leaderboard.map((p, i) =>
-    `<p>#${i + 1} — <strong>${p.name}</strong> — ${p.score}</p>`
+  leaderboardDiv.innerHTML = leaderboard.map((p, i) =>
+    `<p>#${i+1} — <strong>${p.name}</strong> — ${p.score}</p>`
   ).join("");
-}
-function endGame() {
-  saveScore(nameInput.value, score);
-
-  clearInterval(timer);
-  gameState="gameover";
-  ...
 }
