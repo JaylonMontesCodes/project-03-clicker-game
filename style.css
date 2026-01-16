@@ -80,3 +80,50 @@ body[data-style="clean"] button {
   color: gold;
   font-weight: bold;
 }
+/* ===== LEADERBOARD PANEL ===== */
+#leaderboard {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 220px;
+
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 14px;
+  padding: 12px;
+
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+  text-align: left;
+  font-size: 14px;
+}
+
+/* Leaderboard header */
+#leaderboard::before {
+  content: "🏆 Leaderboard";
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  color: #38bdf8;
+  margin-bottom: 10px;
+}
+
+/* Leaderboard rows */
+#leaderboard p {
+  margin: 6px 0;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+}
+
+/* Top player glow */
+#leaderboard p:first-child {
+  background: linear-gradient(90deg, #facc15, #f59e0b);
+  color: black;
+  font-weight: bold;
+}
+
+/* Clean mode */
+body[data-style="clean"] #leaderboard {
+  background: #020617;
+  box-shadow: none;
+}
