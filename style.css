@@ -63,3 +63,20 @@ body[data-style="clean"] button {
   from { opacity:1; transform: translate(-50%,0); }
   to { opacity:0; transform: translate(-50%,-80px); }
 }
+#leaderboard {
+  margin-top: 12px;
+  padding: 12px 20px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 12px;
+  min-width: 240px;
+}
+
+#leaderboard p {
+  margin: 6px 0;
+  font-size: 16px;
+}
+
+#leaderboard p:first-child {
+  color: gold;
+  font-weight: bold;
+}
